@@ -1,0 +1,33 @@
+# 依存パッケージ
+node_modules/
+
+# 環境変数
+.env
+.env.local
+.env.*.local
+
+# ビルド成果物
+dist/
+build/
+.next/
+out/
+
+# OS 生成ファイル
+.DS_Store
+Thumbs.db
+
+# エディタ設定
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# ログ
+*.log
+npm-debug.log*
+
+# キャッシュ
+.cache/
+.parcel-cache/
