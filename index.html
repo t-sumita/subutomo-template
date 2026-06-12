@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>&lt;記入: サイト名&gt;</title>
+  <style>
+    body { margin: 0; font-family: sans-serif; }
+
+    /* バージョン表示(右下) */
+    #version {
+      position: fixed;
+      right: 12px;
+      bottom: 12px;
+      font: 11px monospace;
+      color: rgba(0, 0, 0, 0.45);
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+  <!-- ── ここからサイト本体を実装する ──────────────────────────── -->
+  <main>
+    <h1>&lt;記入: サイト名&gt;</h1>
+  </main>
+
+  <!-- バージョン表示(定義は config.js の APP_VERSION のみ。重複定義禁止) -->
+  <div id="version"></div>
+  <script type="module">
+    import { APP_VERSION } from './config.js';
+    document.getElementById('version').textContent = `v${APP_VERSION}`;
+  </script>
+
+  <!-- Subutomo バッジ(currentSiteId と theme を記入すれば動く) -->
+  <script>
+    window.SUBUTOMO_BADGE_CONFIG = {
+      currentSiteId: '<記入: 新プロジェクト名>',
+      sitesJsonPath: 'https://t-sumita.github.io/subutomo-template/config/subutomo-sites.json',
+      logoPath: './common/assets/logo.png',
+      theme: 'light-bg',   // 明るい背景: 'light-bg' / 暗い背景: 'dark-bg'
+      onSecretAction: null
+    };
+  </script>
+  <script src="./assets/subutomo-badge.js"></script>
+</body>
+</html>

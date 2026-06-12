@@ -32,7 +32,8 @@ python -m http.server 8080
    ```
 
 4. `CLAUDE.md` の記入欄(プロジェクト名・目的・リポジトリ・公開URL)を埋める
-5. Subutomo バッジを組み込む(下記「Subutomo 共通パーツ」参照)
+5. `index.html` の `<記入>` を埋める(タイトル、`SUBUTOMO_BADGE_CONFIG` の
+   `currentSiteId`・`theme`。バッジは配線済みなのでこれだけで動く)
 6. `STATUS.md` を起点に開発を開始する
 7. サイトを GitHub Pages で公開したら、**本リポジトリの台帳に登録する**
    (下記「サイト台帳への登録」参照)
@@ -61,7 +62,7 @@ python -m http.server 8080
    gh repo create t-sumita/<新プロジェクト名> --private --source . --remote origin --push
    ```
 
-5. Subutomo バッジを組み込み、開発を開始する
+5. `index.html` の `<記入>` を埋めて開発を開始する(バッジは配線済み)
 6. サイト公開後、本リポジトリの台帳に登録する
 
 ## Subutomo 共通パーツ(サイト台帳とバッジ)
@@ -89,7 +90,9 @@ https://t-sumita.github.io/subutomo-template/config/subutomo-sites.json
 
 ### Subutomo バッジの組み込み(3点セット)
 
-新サイトへは次の3点をコピー・追記する。
+**本テンプレートから作ったサイトには配線済み**(`index.html` の `<記入>` を
+埋めるだけでよい)。以下はテンプレ由来でない**既存サイトへ後付けする場合**の手順。
+次の3点をコピー・追記する。
 
 1. `assets/subutomo-badge.js`(ES5・依存なし・単一ファイル)
 2. `common/assets/logo.png`(公式ロゴ)
