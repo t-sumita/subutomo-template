@@ -105,6 +105,10 @@ https://t-sumita.github.io/subutomo-template/config/subutomo-sites.json
     sitesJsonPath: 'https://t-sumita.github.io/subutomo-template/config/subutomo-sites.json',
     logoPath: './common/assets/logo.png',
     theme: 'light-bg',   // 明るい背景なら 'light-bg'、暗い背景なら 'dark-bg'
+    privacy: {           // 任意: パネル下部に英文のプライバシー宣言を表示
+      localStorage: false,   // 設定をブラウザに保存するサイトは true
+      analytics: false       // Cloudflare Web Analytics を入れたサイトは true
+    },
     onSecretAction: null
   };
 </script>
@@ -114,6 +118,9 @@ https://t-sumita.github.io/subutomo-template/config/subutomo-sites.json
 - 左下に共通フッターと同じ見た目(ロゴ+© Subutomo Dev)が表示され、
   クリックで他サイトへのリンク一覧パネルが開く
 - 台帳の取得に失敗してもパネルは "Failed to load links" を出して静かに縮小する
+- `privacy` のフラグが全て false または未指定なら宣言セクションは表示されない
+- Shift+クリックはパネルを開かず素通しする(隠し機能などホスト側の統合用。
+  `elementId` でバッジ要素に id を付ければ既存スクリプトからバインドできる)
 - canvas 全面でポインタイベントを取るサイトでは、`.su-badge, .su-panel` への
   クリック/タッチをドラッグ処理より先に素通しさせること(subuta-site の実装参照)
 

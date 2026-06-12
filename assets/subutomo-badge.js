@@ -14,6 +14,10 @@
  *       theme: 'light-bg',          // 'light-bg' | 'dark-bg'
  *       elementId: '',              // optional id for the badge element so
  *                                   // host scripts can bind extra handlers
+ *       privacy: {                  // optional privacy notes shown at the
+ *         localStorage: false,      // bottom of the panel; section is
+ *         analytics: false          // hidden when omitted or all false
+ *       },
  *       onSecretAction: null        // reserved hook, no auth implemented
  *     };
  *   </script>
@@ -32,6 +36,7 @@
   var logoPath      = cfg.logoPath || './common/assets/logo.png';
   var theme         = cfg.theme === 'dark-bg' ? 'dark-bg' : 'light-bg';
   var elementId     = cfg.elementId || '';
+  var privacy       = cfg.privacy || null;
   // Reserved for future secret actions; intentionally unused for now.
   var onSecretAction =
     typeof cfg.onSecretAction === 'function' ? cfg.onSecretAction : null;
@@ -79,7 +84,11 @@
     '.su-item:hover{background:rgba(255,255,255,0.08);}' +
     '.su-title{color:#9ec5ff;font-weight:bold;}' +
     '.su-desc{color:rgba(220,220,230,0.75);font-size:12px;margin-top:2px;}' +
-    '.su-msg{color:rgba(225,205,165,0.9);font-size:12px;}';
+    '.su-msg{color:rgba(225,205,165,0.9);font-size:12px;}' +
+    '.su-privacy{margin-top:10px;padding-top:8px;' +
+    'border-top:1px solid rgba(255,255,255,0.12);}' +
+    '.su-privacy div{color:rgba(200,200,210,0.55);font-size:10.5px;' +
+    'line-height:1.5;}';
   document.head.appendChild(style);
 
   // ── badge: official logo + copyright (shared footer appearance) ───
@@ -109,6 +118,27 @@
     panel.appendChild(head);
   }
 
+  // privacy notes at the bottom of the panel (hidden when all flags off)
+  function addPrivacy() {
+    if (!privacy) return;
+    var lines = [];
+    if (privacy.localStorage) {
+      lines.push('Settings are saved in your browser only.');
+    }
+    if (privacy.analytics) {
+      lines.push('Anonymous, cookieless analytics by Cloudflare.');
+    }
+    if (lines.length === 0) return;
+    var box = document.createElement('div');
+    box.className = 'su-privacy';
+    for (var i = 0; i < lines.length; i++) {
+      var line = document.createElement('div');
+      line.textContent = lines[i];
+      box.appendChild(line);
+    }
+    panel.appendChild(box);
+  }
+
   function renderMessage(msg) {
     panel.innerHTML = '';
     addHead();
@@ -116,6 +146,7 @@
     m.className = 'su-msg';
     m.textContent = msg;
     panel.appendChild(m);
+    addPrivacy();
   }
 
   function renderSites(list) {
@@ -143,7 +174,11 @@
       panel.appendChild(a);
       shown++;
     }
-    if (shown === 0) renderMessage('No other sites yet');
+    if (shown === 0) {
+      renderMessage('No other sites yet');
+      return;
+    }
+    addPrivacy();
   }
 
   // ── lazy fetch on first open; degrade quietly on failure ──────────
