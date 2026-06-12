@@ -67,14 +67,15 @@ python -m http.server 8080
 
 ## Subutomo 共通パーツ(サイト台帳とバッジ)
 
-### サイト台帳 — 正は本リポジトリ
+### サイト台帳 — 正本は本リポジトリ、参照は各サイトのローカル
 
-全 Subutomo Dev サイトの台帳は **`config/subutomo-sites.json`(本リポジトリが唯一の正)** で管理し、
-本リポジトリの GitHub Pages から各サイトへ配信する。
+全 Subutomo Dev サイトの台帳は **`config/subutomo-sites.json`(本リポジトリが唯一の正本)** で管理する。
+各サイトは同期スキル(`subutomo-site-kit`)で複製された**自リポジトリ内のコピーをローカル参照**する
+(`sitesJsonPath: 'config/subutomo-sites.json'`)。
 
-```
-https://t-sumita.github.io/subutomo-template/config/subutomo-sites.json
-```
+> **実行時に本リポジトリの Pages 上の台帳を fetch する方式は廃止。**
+> 理由: テンプレの改名・削除・障害が全サイトに波及するため。
+> 正本をテンプレに置き、同期スキルで各サイトへ複製する運用は従来どおり。
 
 - スキーマ: `{ id, title, description(英語), url, thumb, size, status }`
 - `status: "visible"` のもののみ各サイトで表示される
@@ -86,23 +87,25 @@ https://t-sumita.github.io/subutomo-template/config/subutomo-sites.json
 
 1. 本リポジトリの `config/subutomo-sites.json` にエントリを1件追加する
    (description は英語で記載)
-2. 本リポジトリへ push する(これだけで全サイトのバッジに反映される)
+2. 同期スキル(`subutomo-site-kit`)で台帳を各サイトの
+   `config/subutomo-sites.json` へ複製し、各サイトを push する
 
 ### Subutomo バッジの組み込み(3点セット)
 
 **本テンプレートから作ったサイトには配線済み**(`index.html` の `<記入>` を
 埋めるだけでよい)。以下はテンプレ由来でない**既存サイトへ後付けする場合**の手順。
-次の3点をコピー・追記する。
+次の4点をコピー・追記する。
 
 1. `assets/subutomo-badge.js`(ES5・依存なし・単一ファイル)
 2. `common/assets/logo.png`(公式ロゴ)
-3. `index.html` の `</body>` 直前にスニペットを追記:
+3. `config/subutomo-sites.json`(台帳。テンプレ正本からコピー)
+4. `index.html` の `</body>` 直前にスニペットを追記:
 
 ```html
 <script>
   window.SUBUTOMO_BADGE_CONFIG = {
     currentSiteId: '<新プロジェクト名>',
-    sitesJsonPath: 'https://t-sumita.github.io/subutomo-template/config/subutomo-sites.json',
+    sitesJsonPath: 'config/subutomo-sites.json',
     logoPath: './common/assets/logo.png',
     theme: 'light-bg',   // 明るい背景なら 'light-bg'、暗い背景なら 'dark-bg'
     privacy: {           // 任意: パネル下部に英文のプライバシー宣言を表示
