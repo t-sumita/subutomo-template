@@ -12,11 +12,15 @@
  *       sitesJsonPath: './config/subutomo-sites.json',
  *       logoPath: './common/assets/logo.png',
  *       theme: 'light-bg',          // 'light-bg' | 'dark-bg'
+ *       elementId: '',              // optional id for the badge element so
+ *                                   // host scripts can bind extra handlers
  *       onSecretAction: null        // reserved hook, no auth implemented
  *     };
  *   </script>
  *   <script src="./assets/subutomo-badge.js"></script>
  *
+ * Shift+click on the badge is ignored by the panel toggle, leaving it
+ * free for host-site integrations (e.g. hidden admin entry).
  * All panel UI text is English only. No frameworks, no modules.
  */
 (function () {
@@ -27,6 +31,7 @@
   var sitesJsonPath = cfg.sitesJsonPath || './config/subutomo-sites.json';
   var logoPath      = cfg.logoPath || './common/assets/logo.png';
   var theme         = cfg.theme === 'dark-bg' ? 'dark-bg' : 'light-bg';
+  var elementId     = cfg.elementId || '';
   // Reserved for future secret actions; intentionally unused for now.
   var onSecretAction =
     typeof cfg.onSecretAction === 'function' ? cfg.onSecretAction : null;
@@ -81,6 +86,7 @@
   var badge = document.createElement('div');
   badge.className = 'su-badge';
   badge.title = 'Subutomo Dev';
+  if (elementId) badge.id = elementId;
 
   var logo = document.createElement('img');
   logo.src = logoPath;
@@ -163,6 +169,7 @@
   }
 
   badge.addEventListener('click', function (e) {
+    if (e.shiftKey) return;  // shift+click is reserved for host integrations
     e.stopPropagation();
     if (isOpen()) {
       setOpen(false);
