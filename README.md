@@ -4,14 +4,16 @@
 
 > 認証モジュールは同梱しない。必要時は CLAUDE.md の認証方針を参照。
 
-## セットアップ
+## セットアップ(ローカル確認)
+
+静的サイト構成(単一HTML + ES モジュール)のため、ローカルサーバーで確認する。
 
 ```bash
-# 依存パッケージのインストール
-npm install
+# Node.js
+npx serve .
 
-# 開発サーバー起動
-npm run dev
+# Python
+python -m http.server 8080
 ```
 
 ## 使い方
@@ -30,7 +32,10 @@ npm run dev
    ```
 
 4. `CLAUDE.md` の記入欄(プロジェクト名・目的・リポジトリ・公開URL)を埋める
-5. `STATUS.md` を起点に開発を開始する
+5. Subutomo バッジを組み込む(下記「Subutomo 共通パーツ」参照)
+6. `STATUS.md` を起点に開発を開始する
+7. サイトを GitHub Pages で公開したら、**本リポジトリの台帳に登録する**
+   (下記「サイト台帳への登録」参照)
 
 ### 方法B: ローカルでコピーする
 
@@ -56,7 +61,58 @@ npm run dev
    gh repo create t-sumita/<新プロジェクト名> --private --source . --remote origin --push
    ```
 
-5. 開発を開始する
+5. Subutomo バッジを組み込み、開発を開始する
+6. サイト公開後、本リポジトリの台帳に登録する
+
+## Subutomo 共通パーツ(サイト台帳とバッジ)
+
+### サイト台帳 — 正は本リポジトリ
+
+全 Subutomo Dev サイトの台帳は **`config/subutomo-sites.json`(本リポジトリが唯一の正)** で管理し、
+本リポジトリの GitHub Pages から各サイトへ配信する。
+
+```
+https://t-sumita.github.io/subutomo-template/config/subutomo-sites.json
+```
+
+- スキーマ: `{ id, title, description(英語), url, thumb, size, status }`
+- `status: "visible"` のもののみ各サイトで表示される
+- バッジのサイト一覧に出るのは **id が `-site` で終わるもののみ**(それ以外は作品扱い)
+- `thumb` の正典は `https://t-sumita.github.io/spctrl-site/contents/<id>/thumb.png`
+  (画像を用意する場合は spctrl-site/contents に置く)
+
+### サイト台帳への登録(新サイト公開時)
+
+1. 本リポジトリの `config/subutomo-sites.json` にエントリを1件追加する
+   (description は英語で記載)
+2. 本リポジトリへ push する(これだけで全サイトのバッジに反映される)
+
+### Subutomo バッジの組み込み(3点セット)
+
+新サイトへは次の3点をコピー・追記する。
+
+1. `assets/subutomo-badge.js`(ES5・依存なし・単一ファイル)
+2. `common/assets/logo.png`(公式ロゴ)
+3. `index.html` の `</body>` 直前にスニペットを追記:
+
+```html
+<script>
+  window.SUBUTOMO_BADGE_CONFIG = {
+    currentSiteId: '<新プロジェクト名>',
+    sitesJsonPath: 'https://t-sumita.github.io/subutomo-template/config/subutomo-sites.json',
+    logoPath: './common/assets/logo.png',
+    theme: 'light-bg',   // 明るい背景なら 'light-bg'、暗い背景なら 'dark-bg'
+    onSecretAction: null
+  };
+</script>
+<script src="./assets/subutomo-badge.js"></script>
+```
+
+- 左下に共通フッターと同じ見た目(ロゴ+© Subutomo Dev)が表示され、
+  クリックで他サイトへのリンク一覧パネルが開く
+- 台帳の取得に失敗してもパネルは "Failed to load links" を出して静かに縮小する
+- canvas 全面でポインタイベントを取るサイトでは、`.su-badge, .su-panel` への
+  クリック/タッチをドラッグ処理より先に素通しさせること(subuta-site の実装参照)
 
 ## ライセンス
 

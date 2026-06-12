@@ -1,0 +1,47 @@
+[
+  {
+    "id": "qed-arcade",
+    "title": "QED",
+    "description": "QIX-style territory capture game",
+    "url": "https://t-sumita.github.io/qed-arcade/",
+    "thumb": "https://t-sumita.github.io/spctrl-site/contents/qed/thumb.png",
+    "size": 4,
+    "status": "visible"
+  },
+  {
+    "id": "fisheye-tool",
+    "title": "fisheye-tool",
+    "description": "Fisheye lens image preview tool",
+    "url": "https://t-sumita.github.io/fisheye-tool/",
+    "thumb": "https://t-sumita.github.io/spctrl-site/contents/fisheye-tool/thumb.png",
+    "size": 4,
+    "status": "visible"
+  },
+  {
+    "id": "spctrl-site",
+    "title": "spctrl-site",
+    "description": "Immersive content portal of Subutomo Dev",
+    "url": "https://t-sumita.github.io/spctrl-site/",
+    "thumb": "https://t-sumita.github.io/spctrl-site/contents/spctrl-site/thumb.png",
+    "size": 4,
+    "status": "visible"
+  },
+  {
+    "id": "strata-site",
+    "title": "strata-site",
+    "description": "Layered sky exploration site",
+    "url": "https://t-sumita.github.io/strata-site/",
+    "thumb": "",
+    "size": 4,
+    "status": "visible"
+  },
+  {
+    "id": "subuta-site",
+    "title": "subuta-site",
+    "description": "Cute pig characters roaming a 3D playground",
+    "url": "https://t-sumita.github.io/subuta-site/",
+    "thumb": "",
+    "size": 1,
+    "status": "visible"
+  }
+]
