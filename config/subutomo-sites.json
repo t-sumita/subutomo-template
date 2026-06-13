@@ -29,18 +29,18 @@
   {
     "id": "strata-site",
     "title": "strata-site",
-    "description": "Layered sky exploration site",
+    "description": "A visual journey through space, navigated with arrow keys or swipes",
     "url": "https://t-sumita.github.io/strata-site/",
-    "thumb": "",
+    "thumb": "https://t-sumita.github.io/spctrl-site/contents/strata-site/thumb.png",
     "size": 4,
     "status": "visible"
   },
   {
     "id": "subuta-site",
     "title": "subuta-site",
-    "description": "Cute pig characters roaming a 3D playground",
+    "description": "A site where quirky, adorable Subuta characters gather",
     "url": "https://t-sumita.github.io/subuta-site/",
-    "thumb": "",
+    "thumb": "https://t-sumita.github.io/spctrl-site/contents/subuta-site/thumb.png",
     "size": 1,
     "status": "visible"
   }
