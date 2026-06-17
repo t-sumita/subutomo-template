@@ -127,6 +127,27 @@ python -m http.server 8080
 - canvas 全面でポインタイベントを取るサイトでは、`.su-badge, .su-panel` への
   クリック/タッチをドラッグ処理より先に素通しさせること(subuta-site の実装参照)
 
+### ファビコンの組み込み(全サイト共通アセット)
+
+ファビコン3点(`assets/favicon.svg` / `assets/favicon-32.png` /
+`assets/favicon-180.png`)は **Subutomo Dev 共通アセット**。正本は本リポジトリの
+`assets/` に置き、同期スキル(`subutomo-site-kit`)で各サイトへ配布する。
+
+**本テンプレートから作ったサイトには配線済み**(`index.html` の `<head>` に
+下記 link が入っている)。以下はテンプレ由来でない**既存サイトへ後付けする場合**の手順。
+
+1. 次の3点を各サイトの `assets/` へコピーする:
+   - `assets/favicon.svg`(本体・拡大に強い SVG)
+   - `assets/favicon-32.png`(32×32 PNG・SVG 非対応環境向け)
+   - `assets/favicon-180.png`(180×180 PNG・iOS ホーム画面用)
+2. `index.html` の `<head>` に次の link を追記する:
+
+```html
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/favicon-180.png">
+```
+
 ## ライセンス
 
 \<記入\>
