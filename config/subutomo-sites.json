@@ -4,7 +4,7 @@
     "title": "QED",
     "description": "QIX-style territory capture game",
     "url": "https://t-sumita.github.io/qed-arcade/",
-    "thumb": "https://t-sumita.github.io/spctrl-site/contents/qed/thumb.png",
+    "thumb": "https://club.subutomo.dev/contents/qed/thumb.png",
     "size": 4,
     "status": "visible"
   },
@@ -13,7 +13,7 @@
     "title": "fisheye-tool",
     "description": "Fisheye lens image preview tool",
     "url": "https://t-sumita.github.io/fisheye-tool/",
-    "thumb": "https://t-sumita.github.io/spctrl-site/contents/fisheye-tool/thumb.png",
+    "thumb": "https://club.subutomo.dev/contents/fisheye-tool/thumb.png",
     "size": 4,
     "status": "visible"
   },
@@ -21,8 +21,8 @@
     "id": "spctrl-site",
     "title": "spctrl-site",
     "description": "Immersive content portal of Subutomo Dev",
-    "url": "https://t-sumita.github.io/spctrl-site/",
-    "thumb": "https://t-sumita.github.io/spctrl-site/contents/spctrl-site/thumb.png",
+    "url": "https://club.subutomo.dev/",
+    "thumb": "https://club.subutomo.dev/contents/spctrl-site/thumb.png",
     "size": 4,
     "status": "visible"
   },
@@ -31,7 +31,7 @@
     "title": "strata-site",
     "description": "A visual journey through space, navigated with arrow keys or swipes",
     "url": "https://t-sumita.github.io/strata-site/",
-    "thumb": "https://t-sumita.github.io/spctrl-site/contents/strata-site/thumb.png",
+    "thumb": "https://club.subutomo.dev/contents/strata-site/thumb.png",
     "size": 4,
     "status": "visible"
   },
@@ -40,7 +40,7 @@
     "title": "subuta-site",
     "description": "A site where quirky, adorable Subuta characters gather",
     "url": "https://t-sumita.github.io/subuta-site/",
-    "thumb": "https://t-sumita.github.io/spctrl-site/contents/subuta-site/thumb.png",
+    "thumb": "https://club.subutomo.dev/contents/subuta-site/thumb.png",
     "size": 4,
     "status": "visible"
   },
@@ -49,7 +49,7 @@
     "title": "OOI-QUEST",
     "description": "A mysterious adventure exploring the landmarks of Oimachi, Tokyo (Japanese only)",
     "url": "https://t-sumita.github.io/ooi-quest/",
-    "thumb": "https://t-sumita.github.io/spctrl-site/contents/ooi-quest/thumb.png",
+    "thumb": "https://club.subutomo.dev/contents/ooi-quest/thumb.png",
     "size": 4,
     "status": "visible"
   },
@@ -58,7 +58,7 @@
     "title": "VOICE IDEA MAPPER",
     "description": "A voice-driven idea mapping web app",
     "url": "https://t-sumita.github.io/voice-idea-mapper/",
-    "thumb": "https://t-sumita.github.io/spctrl-site/contents/voice-idea-mapper/thumb.png",
+    "thumb": "https://club.subutomo.dev/contents/voice-idea-mapper/thumb.png",
     "size": 4,
     "status": "visible"
   }

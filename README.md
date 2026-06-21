@@ -80,7 +80,7 @@ python -m http.server 8080
 - スキーマ: `{ id, title, description(英語), url, thumb, size, status }`
 - `status: "visible"` のもののみ各サイトで表示される
 - バッジのサイト一覧に出るのは **id が `-site` で終わるもののみ**(それ以外は作品扱い)
-- `thumb` の正典は `https://t-sumita.github.io/spctrl-site/contents/<id>/thumb.png`
+- `thumb` の正典は `https://club.subutomo.dev/contents/<id>/thumb.png`
   (画像を用意する場合は spctrl-site/contents に置く)
 
 ### サイト台帳への登録(新サイト公開時)
