@@ -28,6 +28,9 @@
  * Panel UI text auto-switches JA/EN by <html lang> (lang starts with
  * "ja" -> Japanese, otherwise English). Site titles/descriptions use the
  * ledger's *_ja fields when present, falling back to the English fields.
+ * The language is re-read dynamically: the panel re-renders on open, on
+ * <html lang> changes (MutationObserver), and on a "subu:langchange" event
+ * dispatched on document -- so a host JP/EN toggle updates the badge live.
  * Brand name and copyright are not translated. No frameworks, no modules.
  */
 (function () {
@@ -50,8 +53,9 @@
   // ── i18n: <html lang> で自動切替("ja*" → 日本語 / それ以外 → 英語)──
   // ブランド名(Subutomo Dev)とコピーライトは不訳。サイト説明は台帳の
   // *_ja フィールド優先・無ければ英語にフォールバック。
-  var lang = (document.documentElement.lang || '')
-    .toLowerCase().indexOf('ja') === 0 ? 'ja' : 'en';
+  // 言語は読み込み時固定ではなく動的に読み直す(refreshLang)。後からの
+  // JP/EN トグルに追従させるため、パネル開閉・<html lang>変更・subu:langchange
+  // を契機に再評価して再描画する。
   var STR = {
     en: {
       loading: 'Loading...',
@@ -68,7 +72,17 @@
       privacyAnalytics: 'Cloudflare による匿名・Cookie 不使用のアクセス解析を行っています。'
     }
   };
-  var T = STR[lang] || STR.en;
+  var lang, T;
+  // 現在の <html lang> を読み直して lang / T を更新。変化があれば true を返す。
+  function refreshLang() {
+    var L = (document.documentElement.lang || '')
+      .toLowerCase().indexOf('ja') === 0 ? 'ja' : 'en';
+    var changed = (L !== lang);
+    lang = L;
+    T = STR[lang] || STR.en;
+    return changed;
+  }
+  refreshLang();
 
   // パネルの title / description を言語選択。次のいずれの形でも安全に扱う:
   //   ・文字列(英語)            例: "QIX-style ..."
@@ -220,7 +234,8 @@
   }
 
   // ── lazy fetch on first open; degrade quietly on failure ──────────
-  var loaded = false;
+  // 取得結果は保持し、言語切替時に再フェッチせず再描画できるようにする。
+  var loaded = false, sitesData = null, loadFailed = false;
   function loadSites() {
     if (loaded) return;
     loaded = true;
@@ -230,8 +245,15 @@
         if (!r.ok) throw new Error('HTTP ' + r.status);
         return r.json();
       })
-      .then(function (list) { renderSites(list); })
-      .catch(function () { renderMessage(T.failed); });
+      .then(function (list) { sitesData = list; renderSites(list); })
+      .catch(function () { loadFailed = true; renderMessage(T.failed); });
+  }
+
+  // 現在の表示状態を、最新言語で描き直す(再フェッチなし)
+  function rerender() {
+    if (sitesData) renderSites(sitesData);
+    else if (loadFailed) renderMessage(T.failed);
+    else if (loaded) renderMessage(T.loading);
   }
 
   function isOpen() {
@@ -247,10 +269,24 @@
     if (isOpen()) {
       setOpen(false);
     } else {
+      refreshLang();   // 開く直前に現在の <html lang> を読み直す
       loadSites();
+      rerender();      // 既ロードなら最新言語で再描画してから開く
       setOpen(true);
     }
   });
+
+  // ── 言語切替への追従 ──────────────────────────────────────────────
+  // <html lang> の変化(MutationObserver)と subu:langchange を購読し、
+  // パネルが開いていれば最新言語で再描画する(ホストの JP/EN トグルに即追従)。
+  function onLangMaybeChanged() {
+    if (refreshLang() && isOpen()) rerender();
+  }
+  if (window.MutationObserver) {
+    new MutationObserver(onLangMaybeChanged).observe(
+      document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+  }
+  document.addEventListener('subu:langchange', onLangMaybeChanged);
 
   // close when clicking anywhere outside the panel
   document.addEventListener('click', function (e) {
