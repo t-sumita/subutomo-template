@@ -25,7 +25,10 @@
  *
  * Shift+click on the badge is ignored by the panel toggle, leaving it
  * free for host-site integrations (e.g. hidden admin entry).
- * All panel UI text is English only. No frameworks, no modules.
+ * Panel UI text auto-switches JA/EN by <html lang> (lang starts with
+ * "ja" -> Japanese, otherwise English). Site titles/descriptions use the
+ * ledger's *_ja fields when present, falling back to the English fields.
+ * Brand name and copyright are not translated. No frameworks, no modules.
  */
 (function () {
   'use strict';
@@ -43,6 +46,29 @@
 
   var COPYRIGHT = '© ' + new Date().getFullYear() + ' Subutomo Dev';
   var FONT = '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif';
+
+  // ── i18n: <html lang> で自動切替("ja*" → 日本語 / それ以外 → 英語)──
+  // ブランド名(Subutomo Dev)とコピーライトは不訳。サイト説明は台帳の
+  // *_ja フィールド優先・無ければ英語にフォールバック。
+  var lang = (document.documentElement.lang || '')
+    .toLowerCase().indexOf('ja') === 0 ? 'ja' : 'en';
+  var STR = {
+    en: {
+      loading: 'Loading...',
+      failed: 'Failed to load links',
+      empty: 'No other sites yet',
+      privacyLocal: 'Settings are saved in your browser only.',
+      privacyAnalytics: 'Anonymous, cookieless analytics by Cloudflare.'
+    },
+    ja: {
+      loading: '読み込み中…',
+      failed: 'リンクを読み込めませんでした',
+      empty: 'ほかのサイトはまだありません',
+      privacyLocal: '設定はお使いのブラウザ内にのみ保存されます。',
+      privacyAnalytics: 'Cloudflare による匿名・Cookie 不使用のアクセス解析を行っています。'
+    }
+  };
+  var T = STR[lang] || STR.en;
 
   // colors matching the shared subutomo-footer component
   var textColor = theme === 'light-bg'
@@ -123,10 +149,10 @@
     if (!privacy) return;
     var lines = [];
     if (privacy.localStorage) {
-      lines.push('Settings are saved in your browser only.');
+      lines.push(T.privacyLocal);
     }
     if (privacy.analytics) {
-      lines.push('Anonymous, cookieless analytics by Cloudflare.');
+      lines.push(T.privacyAnalytics);
     }
     if (lines.length === 0) return;
     var box = document.createElement('div');
@@ -165,17 +191,18 @@
       a.rel = 'noopener noreferrer';
       var t = document.createElement('div');
       t.className = 'su-title';
-      t.textContent = s.title;
+      t.textContent = (lang === 'ja' && s.title_ja) ? s.title_ja : s.title;
       var d = document.createElement('div');
       d.className = 'su-desc';
-      d.textContent = s.description || '';
+      d.textContent = (lang === 'ja' && s.description_ja)
+        ? s.description_ja : (s.description || '');
       a.appendChild(t);
       a.appendChild(d);
       panel.appendChild(a);
       shown++;
     }
     if (shown === 0) {
-      renderMessage('No other sites yet');
+      renderMessage(T.empty);
       return;
     }
     addPrivacy();
@@ -186,14 +213,14 @@
   function loadSites() {
     if (loaded) return;
     loaded = true;
-    renderMessage('Loading...');
+    renderMessage(T.loading);
     fetch(sitesJsonPath)
       .then(function (r) {
         if (!r.ok) throw new Error('HTTP ' + r.status);
         return r.json();
       })
       .then(function (list) { renderSites(list); })
-      .catch(function () { renderMessage('Failed to load links'); });
+      .catch(function () { renderMessage(T.failed); });
   }
 
   function isOpen() {

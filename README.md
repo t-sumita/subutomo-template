@@ -78,6 +78,8 @@ python -m http.server 8080
 > 正本をテンプレに置き、同期スキルで各サイトへ複製する運用は従来どおり。
 
 - スキーマ: `{ id, title, description(英語), url, thumb, size, status }`
+  - 任意: `title_ja` / `description_ja` を足すと、`<html lang="ja">` のサイトでは
+    バッジパネルがそれを表示する(無ければ英語の `title` / `description` にフォールバック)
 - `status: "visible"` のもののみ各サイトで表示される
 - バッジのサイト一覧に出るのは **id が `-site` で終わるもののみ**(それ以外は作品扱い)
 - `thumb` の正典は `https://club.subutomo.dev/contents/<id>/thumb.png`
@@ -86,7 +88,7 @@ python -m http.server 8080
 ### サイト台帳への登録(新サイト公開時)
 
 1. 本リポジトリの `config/subutomo-sites.json` にエントリを1件追加する
-   (description は英語で記載)
+   (`description` は英語で記載。日本語サイト向けに任意で `description_ja` も追加可)
 2. 同期スキル(`subutomo-site-kit`)で台帳を各サイトの
    `config/subutomo-sites.json` へ複製し、各サイトを push する
 
@@ -108,7 +110,7 @@ python -m http.server 8080
     sitesJsonPath: 'config/subutomo-sites.json',
     logoPath: './common/assets/logo.png',
     theme: 'light-bg',   // 明るい背景なら 'light-bg'、暗い背景なら 'dark-bg'
-    privacy: {           // 任意: パネル下部に英文のプライバシー宣言を表示
+    privacy: {           // 任意: パネル下部にプライバシー宣言を表示(日英自動切替)
       localStorage: false,   // 設定をブラウザに保存するサイトは true
       analytics: false       // Cloudflare Web Analytics を入れたサイトは true
     },
@@ -120,7 +122,9 @@ python -m http.server 8080
 
 - 左下に共通フッターと同じ見た目(ロゴ+© Subutomo Dev)が表示され、
   クリックで他サイトへのリンク一覧パネルが開く
-- 台帳の取得に失敗してもパネルは "Failed to load links" を出して静かに縮小する
+- パネルのUI文言(プライバシー宣言・読込/失敗/空メッセージ)は `<html lang>` に
+  応じて日英自動切替(`ja*` → 日本語 / それ以外 → 英語)。ブランド名と © は不訳
+- 台帳の取得に失敗してもパネルはローカライズ済みメッセージを出して静かに縮小する
 - `privacy` のフラグが全て false または未指定なら宣言セクションは表示されない
 - Shift+クリックはパネルを開かず素通しする(隠し機能などホスト側の統合用。
   `elementId` でバッジ要素に id を付ければ既存スクリプトからバインドできる)
