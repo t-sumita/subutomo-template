@@ -70,6 +70,18 @@
   };
   var T = STR[lang] || STR.en;
 
+  // パネルの title / description を言語選択。次のいずれの形でも安全に扱う:
+  //   ・文字列(英語)            例: "QIX-style ..."
+  //   ・{en, ja} オブジェクト     例: { en: "...", ja: "..." }
+  //   ・"*_ja" 併記フィールド     例: description + description_ja
+  function pickText(val, valJa) {
+    if (val && typeof val === 'object') {
+      return val[lang] || val.en || val.ja || '';
+    }
+    if (lang === 'ja' && valJa) return valJa;
+    return val || '';
+  }
+
   // colors matching the shared subutomo-footer component
   var textColor = theme === 'light-bg'
     ? 'rgba(0,0,0,0.45)' : 'rgba(255,255,255,0.5)';
@@ -191,11 +203,10 @@
       a.rel = 'noopener noreferrer';
       var t = document.createElement('div');
       t.className = 'su-title';
-      t.textContent = (lang === 'ja' && s.title_ja) ? s.title_ja : s.title;
+      t.textContent = pickText(s.title, s.title_ja) || s.id;
       var d = document.createElement('div');
       d.className = 'su-desc';
-      d.textContent = (lang === 'ja' && s.description_ja)
-        ? s.description_ja : (s.description || '');
+      d.textContent = pickText(s.description, s.description_ja);
       a.appendChild(t);
       a.appendChild(d);
       panel.appendChild(a);

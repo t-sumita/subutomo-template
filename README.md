@@ -77,9 +77,11 @@ python -m http.server 8080
 > 理由: テンプレの改名・削除・障害が全サイトに波及するため。
 > 正本をテンプレに置き、同期スキルで各サイトへ複製する運用は従来どおり。
 
-- スキーマ: `{ id, title, description(英語), url, thumb, size, status }`
-  - 任意: `title_ja` / `description_ja` を足すと、`<html lang="ja">` のサイトでは
-    バッジパネルがそれを表示する(無ければ英語の `title` / `description` にフォールバック)
+- スキーマ: `{ id, title, description, url, thumb, size, status }`
+  - `description` は **`{ "en": "...", "ja": "..." }` オブジェクト**を正準とする
+    (バッジパネルが `<html lang>` に応じて出し分け。`ja` 無指定時は `en` にフォールバック)
+  - 後方互換: `description` が**文字列**(英語)でも可。その場合 `description_ja` を併記すれば
+    日本語サイトで日本語表示になる。`title` も同様に文字列 / `{en,ja}` / `title_ja` を許容
 - `status: "visible"` のもののみ各サイトで表示される
 - バッジのサイト一覧に出るのは **id が `-site` で終わるもののみ**(それ以外は作品扱い)
 - `thumb` の正典は `https://club.subutomo.dev/contents/<id>/thumb.png`
@@ -88,7 +90,7 @@ python -m http.server 8080
 ### サイト台帳への登録(新サイト公開時)
 
 1. 本リポジトリの `config/subutomo-sites.json` にエントリを1件追加する
-   (`description` は英語で記載。日本語サイト向けに任意で `description_ja` も追加可)
+   (`description` は `{ "en": "...", "ja": "..." }` で記載。英語のみの場合は `ja` を省略可)
 2. 同期スキル(`subutomo-site-kit`)で台帳を各サイトの
    `config/subutomo-sites.json` へ複製し、各サイトを push する
 
