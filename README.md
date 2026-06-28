@@ -112,6 +112,7 @@ python -m http.server 8080
     sitesJsonPath: 'config/subutomo-sites.json',
     logoPath: './common/assets/logo.png',
     theme: 'light-bg',   // 明るい背景なら 'light-bg'、暗い背景なら 'dark-bg'
+    version: '1.0.0',    // 任意: © の右に "(v1.0.0)" を表示(省略で非表示)
     privacy: {           // 任意: パネル下部にプライバシー宣言を表示(日英自動切替)
       localStorage: false,   // 設定をブラウザに保存するサイトは true
       analytics: false       // Cloudflare Web Analytics を入れたサイトは true
@@ -122,8 +123,15 @@ python -m http.server 8080
 <script src="./assets/subutomo-badge.js"></script>
 ```
 
+> 版を別ソース(例:`config.js` の `APP_VERSION`)で持つサイトは、`version` を直書きせず
+> `window.SUBUTOMO_FOOTER_VERSION = APP_VERSION;` を設定し
+> `window.__suBadgeApplyVersion && window.__suBadgeApplyVersion();` を呼べばよい
+> (badge.js は後から渡された版にもフック/短時間ポーリングで追従する)。
+
 - 左下に共通フッターと同じ見た目(ロゴ+© Subutomo Dev)が表示され、
   クリックで他サイトへのリンク一覧パネルが開く
+- **版表示は © の右隣**:`version`(または `window.SUBUTOMO_FOOTER_VERSION`)を渡すと
+  `© 2026 Subutomo Dev (vX.Y.Z)` の形で表示。**© と版はバッジが担い、フッターには © を置かない**
 - パネルのUI文言(プライバシー宣言・読込/失敗/空メッセージ)は `<html lang>` に
   応じて日英自動切替(`ja*` → 日本語 / それ以外 → 英語)。ブランド名と © は不訳
   - **読み込み後に言語を変えても追従する**:JP/EN トグル等で `<html lang>` を

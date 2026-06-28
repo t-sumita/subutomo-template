@@ -31,7 +31,10 @@
  * The language is re-read dynamically: the panel re-renders on open, on
  * <html lang> changes (MutationObserver), and on a "subu:langchange" event
  * dispatched on document -- so a host JP/EN toggle updates the badge live.
- * Brand name and copyright are not translated. No frameworks, no modules.
+ * Brand name and copyright are not translated.
+ * Version: pass SUBUTOMO_BADGE_CONFIG.version (or set window
+ * .SUBUTOMO_FOOTER_VERSION) and the badge shows "(vX.Y.Z)" right of the
+ * copyright. Omit it and no version is shown. No frameworks, no modules.
  */
 (function () {
   'use strict';
@@ -121,6 +124,8 @@
     '.su-badge:hover img{opacity:1.0;}' +
     '.su-badge:hover span{color:' + textHover + ';}' +
     '.su-badge:hover span::after{width:100%;}' +
+    '.su-badge .su-ver{opacity:0.85;}' +
+    '.su-badge .su-ver::after{content:none;}' +
     '.su-panel{position:fixed;left:16px;bottom:48px;width:264px;' +
     'max-height:60vh;overflow-y:auto;background:rgba(28,28,38,0.96);' +
     'border-radius:10px;padding:14px 16px;z-index:9999;color:#eee;' +
@@ -297,4 +302,26 @@
 
   document.body.appendChild(badge);
   document.body.appendChild(panel);
+
+  // ── 版表示(© の右隣に "(vX.Y.Z)")──────────────────────────────────
+  // SUBUTOMO_BADGE_CONFIG.version か window.SUBUTOMO_FOOTER_VERSION から取得。
+  // 'v' 接頭辞は有無どちらでも可。未指定なら何も出さない。版を後から
+  // (deferred module 等で)渡す構成にも、フックと短時間ポーリングで対応する。
+  function applyBadgeVersion() {
+    if (badge.querySelector('.su-ver')) return true;
+    var v = cfg.version || window.SUBUTOMO_FOOTER_VERSION;
+    if (!v) return false;
+    var ver = document.createElement('span');
+    ver.className = 'su-ver';
+    ver.textContent = '(v' + String(v).replace(/^v/i, '') + ')';
+    badge.appendChild(ver);
+    return true;
+  }
+  window.__suBadgeApplyVersion = applyBadgeVersion;
+  if (!applyBadgeVersion()) {
+    var _vtries = 0;
+    var _vtimer = setInterval(function () {
+      if (applyBadgeVersion() || ++_vtries > 40) clearInterval(_vtimer);
+    }, 50);
+  }
 }());
