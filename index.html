@@ -12,41 +12,31 @@
     body { margin: 0; font-family: sans-serif; }
 
     /* ══════════════════════════════════════════════════════════════
-       統一フッター (Subutomo Dev 共通フォーマット / subu-mnym と同形)
-       ・支援リンク(チップ/Sponsors/ご意見ご要望)+ 日英トグルのみ。
-         © と版(vX.Y.Z)は左下バッジが担う(badge.js)。フッターに © は置かない。
+       統一フッター (Subutomo Dev 共通フォーマット)
+       ・支援3リンク(チップ/Sponsors/ご意見ご要望)= 画面「右下」に固定
+       ・言語トグル(JP/EN)= 画面「右上」に固定
+       ・© と版(vX.Y.Z)= 左下バッジが担う(badge.js)。ここに © は置かない。
        ・背景は透過。色はテーマトークン(var(--…))を参照し、未定義サイト用に
          フォールバック値を持つ ＝ サイトのテーマカラーがそのまま適用される
-       ・日英切替(右端トグル / window.setFooterLang('ja'|'en') / <html lang>)
-       他サイトへはこの <style> 内の .su-foot 群 + 下の <footer> + <script>
-       2本を丸ごとコピーする。
+       他サイトへはこの <style> の .su-foot* 群 + 下の 2要素(.su-foot-links /
+       .su-foot-lang)+ <script> をコピーする。
        ═══════════════════════════════════════════════════════════════ */
-    .su-foot {
-      --su-foot-muted: var(--text-muted, rgba(0, 0, 0, 0.55));
-      --su-foot-accent: var(--accent, #5a7290);
-      --su-foot-border: var(--border, rgba(0, 0, 0, 0.08));
-      background: transparent;            /* 透過 ＝ サイトのテーマ背景が透ける */
+    /* 支援3リンク: 右下固定クラスタ */
+    .su-foot-links {
+      position: fixed; right: 16px; bottom: 14px; z-index: 9000;
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end;
+      gap: 6px 12px; max-width: 80vw;
       font: 11px ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
       letter-spacing: .03em;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px 16px;
-      padding: 14px 20px 16px;
-      margin-top: 48px;
-      border-top: 1px solid var(--su-foot-border);
     }
-    .su-foot-right { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
-    /* 支援リンク(小さめ控えめ) */
     .su-foot-support { display: flex; align-items: center; gap: 6px; }
-    .su-foot-support a { color: var(--su-foot-muted); text-decoration: none; white-space: nowrap; }
-    .su-foot-support a:hover { color: var(--su-foot-accent); text-decoration: underline; }
-    .su-foot-sep { color: var(--su-foot-muted); opacity: .6; }
+    .su-foot-support a { color: var(--text-muted, rgba(0, 0, 0, 0.55)); text-decoration: none; white-space: nowrap; }
+    .su-foot-support a:hover { color: var(--accent, #5a7290); text-decoration: underline; }
+    .su-foot-sep { color: var(--text-muted, rgba(0, 0, 0, 0.4)); opacity: .6; }
     /* ご意見・ご要望(一回り大きめ＆太字・~12秒周期で一瞬ポップ) */
     .su-foot-feedback {
       font-weight: 700; font-size: 13px;
-      color: var(--su-foot-accent); text-decoration: none; white-space: nowrap;
+      color: var(--accent, #5a7290); text-decoration: none; white-space: nowrap;
       transform-origin: center; animation: su-foot-pop 12s ease-in-out infinite;
     }
     .su-foot-feedback:hover { text-decoration: underline; }
@@ -57,16 +47,16 @@
       97%, 100% { opacity: 1;   transform: scale(1); }
     }
     @media (prefers-reduced-motion: reduce) { .su-foot-feedback { animation: none; } }
-    /* 言語切替トグル */
+    /* 言語トグル: 右上固定 */
     .su-foot-lang {
-      background: none; border: 1px solid var(--su-foot-border); border-radius: 999px;
-      padding: 3px 10px; font: inherit; color: var(--su-foot-muted); cursor: pointer;
+      position: fixed; top: 14px; right: 16px; z-index: 9000;
+      background: none; border: 1px solid var(--border, rgba(0, 0, 0, 0.2)); border-radius: 999px;
+      padding: 3px 10px;
+      font: 11px ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+      letter-spacing: .03em; color: var(--text-muted, rgba(0, 0, 0, 0.55)); cursor: pointer;
       transition: color .15s ease, border-color .15s ease;
     }
-    .su-foot-lang:hover { color: var(--su-foot-accent); border-color: var(--su-foot-accent); }
-    @media (max-width: 480px) {
-      .su-foot { flex-direction: column; align-items: flex-start; }
-    }
+    .su-foot-lang:hover { color: var(--accent, #5a7290); border-color: var(--accent, #5a7290); }
   </style>
 </head>
 <body>
@@ -75,56 +65,52 @@
     <h1>&lt;記入: サイト名&gt;</h1>
   </main>
 
-  <!-- ══ 統一フッター(他サイトへはこの <footer> と下の <script> 2本をコピー)══ -->
-  <footer class="su-foot" data-lang="ja">
-    <div class="su-foot-right">
-      <span class="su-foot-support">
-        <a href="https://ko-fi.com/subutomo" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">☕ </span><span data-i18n="tip">チップ</span></a>
-        <span class="su-foot-sep" aria-hidden="true">・</span>
-        <a href="https://github.com/sponsors/t-sumita" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">❤️ </span>Sponsors</a>
-      </span>
-      <a class="su-foot-feedback" href="https://docs.google.com/forms/d/e/1FAIpQLSe8-WYLGkSj7hkO0aQH9Cy6rNDd4a12sSLfPtlnxTTJUEJl6w/viewform" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">📣 </span><span data-i18n="feedback">ご意見・ご要望</span></a>
-      <button type="button" class="su-foot-lang" data-foot-langtoggle aria-label="Switch language">EN</button>
-    </div>
-  </footer>
+  <!-- ══ 統一フッター: 支援3リンク=右下 / 言語トグル=右上(他サイトへはこの2要素 + 下の <script> をコピー)══ -->
+  <nav class="su-foot-links" aria-label="支援リンク">
+    <span class="su-foot-support">
+      <a href="https://ko-fi.com/subutomo" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">☕ </span><span data-i18n="tip">チップ</span></a>
+      <span class="su-foot-sep" aria-hidden="true">・</span>
+      <a href="https://github.com/sponsors/t-sumita" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">❤️ </span>Sponsors</a>
+    </span>
+    <a class="su-foot-feedback" href="https://docs.google.com/forms/d/e/1FAIpQLSe8-WYLGkSj7hkO0aQH9Cy6rNDd4a12sSLfPtlnxTTJUEJl6w/viewform" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">📣 </span><span data-i18n="feedback">ご意見・ご要望</span></a>
+  </nav>
+  <button type="button" class="su-foot-lang" data-foot-langtoggle aria-label="Switch language">EN</button>
 
   <script>
     (function () {
       'use strict';
-      var foot = document.querySelector('.su-foot');
-      if (!foot) return;
+      var langBtn = document.querySelector('[data-foot-langtoggle]');
+      var i18nNodes = document.querySelectorAll('[data-i18n]');
+      if (!langBtn && !i18nNodes.length) return;
 
-      // 言語辞書(日本語 / 英語)
+      // toggle = ボタンに出す「切替先」表示。日本語は "JP" 表記。
       var I18N = {
         ja: { tip: 'チップ', feedback: 'ご意見・ご要望', toggle: 'EN' },
-        en: { tip: 'Tip',   feedback: 'Feedback',     toggle: '日本語' }
+        en: { tip: 'Tip',   feedback: 'Feedback',     toggle: 'JP' }
       };
+      var curLang = 'ja';
 
-      // footer[data-lang] → <html lang> の順で判定。"en*" のみ英語、他は日本語
+      // <html lang> で判定。"en*" のみ英語、他は日本語
       function detectLang() {
-        var l = (foot.getAttribute('data-lang') ||
-                 document.documentElement.lang || 'ja').toLowerCase();
+        var l = (document.documentElement.lang || 'ja').toLowerCase();
         return l.indexOf('en') === 0 ? 'en' : 'ja';
       }
 
       function applyLang(lang) {
         var dict = I18N[lang] || I18N.ja;
-        var nodes = foot.querySelectorAll('[data-i18n]');
-        for (var i = 0; i < nodes.length; i++) {
-          var k = nodes[i].getAttribute('data-i18n');
-          if (dict[k] != null) nodes[i].textContent = dict[k];
+        for (var i = 0; i < i18nNodes.length; i++) {
+          var k = i18nNodes[i].getAttribute('data-i18n');
+          if (dict[k] != null) i18nNodes[i].textContent = dict[k];
         }
-        var b = foot.querySelector('[data-foot-langtoggle]');
-        if (b) b.textContent = dict.toggle;
-        foot.setAttribute('data-lang', lang);
-        document.documentElement.lang = lang;
+        if (langBtn) langBtn.textContent = dict.toggle;
+        curLang = lang;
+        document.documentElement.lang = lang;   // バッジ(MutationObserver)も追従
       }
 
       window.setFooterLang = applyLang;
 
-      var toggle = foot.querySelector('[data-foot-langtoggle]');
-      if (toggle) toggle.addEventListener('click', function () {
-        applyLang((foot.getAttribute('data-lang') || 'ja') === 'ja' ? 'en' : 'ja');
+      if (langBtn) langBtn.addEventListener('click', function () {
+        applyLang(curLang === 'ja' ? 'en' : 'ja');
       });
 
       applyLang(detectLang());
