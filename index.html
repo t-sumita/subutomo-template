@@ -15,7 +15,7 @@
        統一フッター (Subutomo Dev 共通フォーマット / subu-mnym と同形)
        ・背景は透過。色はテーマトークン(var(--…))を参照し、未定義サイト用に
          フォールバック値を持つ ＝ サイトのテーマカラーがそのまま適用される
-       ・版は config.js の APP_VERSION から "ver. X.Y.Z" で動的注入
+       ・版は config.js の APP_VERSION から "(vX.Y.Z)" で動的注入
        ・日英切替(右端トグル / window.setFooterLang('ja'|'en') / <html lang>)
        他サイトへはこの <style> 内の .su-foot 群 + 下の <footer> + <script>
        2本を丸ごとコピーする。
@@ -129,12 +129,12 @@
         document.documentElement.lang = lang;
       }
 
-      // 版は window.SUBUTOMO_FOOTER_VERSION から "ver. X.Y.Z" で動的埋め込み
+      // 版は window.SUBUTOMO_FOOTER_VERSION から "(vX.Y.Z)" で動的埋め込み
       function applyVersion() {
         var el = foot.querySelector('[data-foot-ver]');
         if (!el) return;
         var v = window.SUBUTOMO_FOOTER_VERSION;
-        if (v) { el.textContent = 'ver. ' + v; el.style.display = ''; }
+        if (v) { el.textContent = '(v' + v + ')'; el.style.display = ''; }
         else { el.style.display = 'none'; }
       }
 
